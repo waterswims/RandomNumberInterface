@@ -2,11 +2,12 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: gcc:4.9
+      - image: madduci/docker-linux-cpp
     steps:
       - checkout
       - run: git submodule init
       - run: git submodule update
+      - run: apt-get install -y cmake
       - run: ccmake . 
       - run: make
       - run: ./RandomNumberInterface
