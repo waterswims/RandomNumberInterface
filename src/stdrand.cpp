@@ -1,6 +1,6 @@
 #include "../includes/stdrand.hpp";
 
-#include <math.h>
+#include <cmath>
 
 namespace watersoft
 {

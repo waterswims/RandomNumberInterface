@@ -11,21 +11,18 @@ set(CMAKE_CONFIGURATION_TYPES "Debug;Release")
 
 include(cmake/compiler.cmake)
 
-set(GTEST_DIR "thirdParty/googletest/includes/googletest/include/gtest")
-
 file(GLOB SOURCES "src/*.cpp")
 file(GLOB INCLUDE "includes/*.hpp" "includes/*.h")
 file(GLOB TEST_SOURCES "tests/*.cpp")
 file(GLOB TEST_INCLUDE "tests/*.hpp" "includes/*.h")
-file(GLOB GTEST_INC "${GTEST_DIR}/*.h")
 
 set(INCLUDES ${INCLUDE})
 set(SRC ${SOURCES})
-set(GTEST_SRC ${GTEST_INC})
 set(TEST_SRC ${TEST_SOURCES} ${TEST_INCLUDE})
 
-include_directories(${INCLUDES}
-    ${GTEST_DIR})
+include_directories(${INCLUDES})
+
+add_subdirectory(thirdParty/Catch2)
 
 if(UNIX)
     find_package(PkgConfig REQUIRED)
@@ -35,12 +32,13 @@ endif()
 add_executable(${PROJECT_NAME}
     ${SRC}
     ${INCLUDES}
-    ${GTEST_SRC}
     ${TEST_SRC})
 
 if(WIN32)
-    target_link_libraries(${PROJECT_NAME} ws2_32)
+    # target_link_libraries(${PROJECT_NAME} ws2_32)
+    target_link_libraries(${PROJECT_NAME} PRIVATE Catch2::Catch2 ws2_32)
 endif()
 if(UNIX)
-    target_link_libraries(${PROJECT_NAME})
+    # target_link_libraries(${PROJECT_NAME})
+    target_link_libraries(${PROJECT_NAME} PRIVATE Catch2::Catch2)
 endif()
