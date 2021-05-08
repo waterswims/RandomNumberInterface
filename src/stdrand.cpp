@@ -1,30 +1,51 @@
-#include "../includes/stdrand.hpp"
+#include "../includes/stdrand.hpp";
 
-stdrand::std_d_unirand::std_d_unirand(int seed) : std_randbase()
+#include <math.h>
+
+namespace watersoft
 {
-    this->change_seed(seed);
+namespace random
+{
+	void StdRand::change_seed(int seed)
+	{
+		generator.seed(seed);
+	}
+
+	double StdRand::generateUniform()
+	{
+		return uniformDistribution(generator);
+	}
+
+	int StdRand::generateBool()
+	{
+		return uniformIntDistribution(generator);
+	}
+
+	double StdRand::generateNormal()
+	{
+		return normalDistribution(generator);
+	}
+
+	double StdRand::generateLognormal()
+	{
+		return lognormalDistribution(generator);
+	}
+
+	void StdRand::generateVector(double* a, double* b, double* c)
+	{
+		double x = generateNormal();
+		double y = generateNormal();
+		double z = generateNormal();
+
+		double x2 = x * x;
+		double y2 = y * y;
+		double z2 = z * z;
+
+		double scaleFactor = 1.0 / pow(x2 + y2 + z2, 0.5);
+
+		*a = x * scaleFactor;
+		*b = y * scaleFactor;
+		*c = z * scaleFactor;
+	}
 }
-
-stdrand::std_i_unirand::std_i_unirand(int seed) : std_randbase()
-{
-    this->change_seed(seed);
-}
-
-stdrand::std_normrand::std_normrand(double m, double sdin, int seed) : std_randbase()
-{
-    M = m;
-    SD = sdin;
-    this->change_seed(seed);
-}
-
-stdrand::std_lognormrand::std_lognormrand(double m, double sdin, int seed) : std_randbase()
-{
-    M = m;
-    SD = sdin;
-    this->change_seed(seed);
-}
-
-stdrand::std_sphere::std_sphere(int seed) : std_randbase()
-{
-    this->change_seed(seed);
 }
